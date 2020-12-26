@@ -33,9 +33,10 @@ export default () => {
     if (nameField != '' && passwordField != '' && emailField != '') {
       alert("cadastro realizado com sucesso")
     } else {
-      alert("Preencha os campos!");
+      alert("Preencha os campos!!");
     }
   }
+
 
   const handleMessageButtonClick = () => {
     navigation.reset({
