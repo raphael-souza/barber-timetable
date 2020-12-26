@@ -41,16 +41,3 @@ export const SignMessageButtomTextBold = styled.Text`
   font-weight: bold;
   margin-left: 5px;
 `;
-
-
-
-
-/**
- * 
-  InputArea,
-  CustomButtom,
-  CustomButtomText,
-  SignMessageButtom,
-  SignMessageButtomText,
-  SignMessageButtomTextBold
-*/
