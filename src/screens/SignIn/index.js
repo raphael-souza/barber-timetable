@@ -1,7 +1,7 @@
 import React, {useState, useContext } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
-import { UserContext } from '../../../contexts/UserContext';
+import { UserContext } from '../../contexts/UserContext';
 
 import {
   Container,
@@ -13,26 +13,22 @@ import {
   SignMessageButtomTextBold
 } from './styles';
 
-import Api from '../../../Api';
-
+import Api from '../../Api';
 import BarberLogo from '../../../assets/barber.svg';
-import SignInput from '../../../components/SignInput';
+import SignInput from '../../components/SignInput';
 import EmailIcon from '../../../assets/email.svg';
 import LockIcon from '../../../assets/lock.svg';
-import PersonIcon from '../../../assets/person.svg'
 
 export default () => {
   const { dispatch: userDispatch } = useContext(UserContext);
   const navigation = useNavigation();
   
-  const [nameField, setNameField] = useState('');
   const [emailField, setEmailField] = useState('suporte@barber.com.br');
   const [passwordField, setPasswordField] = useState('');
   
   const handleSignClick = async () => {
-
-    if (nameField != '' && passwordField != '' && emailField != '') {
-      let json = await Api.signUp(nameField, emailField, passwordField);
+    if (emailField != '' && passwordField != '') {
+      let json = await Api.signIn(emailField, passwordField);
       if (json.token) {
         await AsyncStorage.setItem('token', json.token);
 
@@ -42,21 +38,23 @@ export default () => {
             avatar: json.data.avatar
           }
         });
-
+        
         navigation.reset({
           routes: [{name: 'MainTab'}]
         });
 
+      } else {
+        alert("E-amil e/ou senha inválido!");
       }
-    } else {
-      alert("Preencha os campos corretamente!");
+
+    }else {
+      alert("Preecha os campos!");
     }
   }
 
-
   const handleMessageButtonClick = () => {
     navigation.reset({
-      routes: [{name: 'SignIn'}]
+      routes: [{name: 'SignUp'}]
     });
   }
 
@@ -65,16 +63,10 @@ export default () => {
       <BarberLogo width="100%" height="160" />
       
       <InputArea>
-        <SignInput 
-          IconSvg={PersonIcon} 
-          placeholder="Digite seu nome"
-          value={nameField}
-          onChangeText={t=>setNameField(t)}
-        />
 
         <SignInput 
           IconSvg={EmailIcon} 
-          placeholder="Digite seu e-mail"
+          placeholder="Digite seu e-mail!"
           value={emailField}
           onChangeText={t=>setEmailField(t)}
         />
@@ -90,8 +82,8 @@ export default () => {
       </InputArea>
 
       <SignMessageButtom onPress={handleMessageButtonClick}>
-        <SignMessageButtomText>Já possui uma conta?</SignMessageButtomText>
-        <SignMessageButtomTextBold> Faça login </SignMessageButtomTextBold>
+        <SignMessageButtomText>Ainda não possui uma conta?</SignMessageButtomText>
+        <SignMessageButtomTextBold> Cadastre-se </SignMessageButtomTextBold>
       </SignMessageButtom>
     </Container>
   );
